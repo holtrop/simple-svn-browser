@@ -3,10 +3,13 @@ gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk
 from .version import VERSION
 from .run_svn import run_svn
+from .cache_file import CacheFile
 
 class MainWindow(Gtk.Window):
     def __init__(self, url):
         super().__init__(title = "Simple SVN Browser v%s" % VERSION)
+
+        self.cache_file = CacheFile()
 
         top_hbox = Gtk.Box()
         address_entry = Gtk.Entry(text = url)

@@ -9,6 +9,6 @@ setup(name = "simplesvnbrowser",
       license = "zlib",
       packages = ["simplesvnbrowser"],
       zip_safe = False,
-
       scripts = ["bin/simple-svn-browser"],
+      install_requires = ["pyxdg"],
       )
