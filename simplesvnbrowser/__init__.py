@@ -1,0 +1,1 @@
+from simplesvnbrowser.main_window import MainWindow
