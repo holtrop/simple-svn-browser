@@ -1,0 +1,6 @@
+#!/usr/bin/env python3
+
+import sys
+import simplesvnbrowser.cli
+
+simplesvnbrowser.cli.run(sys.argv)
