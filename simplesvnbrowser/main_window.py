@@ -10,6 +10,10 @@ class MainWindow(Gtk.Window):
         super().__init__(title = "Simple SVN Browser v%s" % VERSION)
 
         self.cache_file = CacheFile()
+        if (self.cache_file["width"] is not None and
+            self.cache_file["height"] is not None):
+            self.set_default_size(self.cache_file["width"],
+                                  self.cache_file["height"])
 
         top_hbox = Gtk.Box()
         address_entry = Gtk.Entry(text = url)
@@ -31,8 +35,16 @@ class MainWindow(Gtk.Window):
 
         self.add(vbox)
 
-        self.connect("delete-event", Gtk.main_quit)
+        self.connect("delete-event", self.__close)
         self.show_all()
 
     def run(self):
         Gtk.main()
+
+    def __close(self, *more):
+        size = self.get_size()
+        self.cache_file["width"] = size[0]
+        self.cache_file["height"] = size[1]
+        self.cache_file.write()
+        Gtk.main_quit()
+        return True
