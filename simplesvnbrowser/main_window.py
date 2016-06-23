@@ -11,7 +11,7 @@ class MainWindow(Gtk.Window):
 
         self.cache_file = CacheFile()
         if (self.cache_file["width"] is not None and
-            self.cache_file["height"] is not None):
+                self.cache_file["height"] is not None):
             self.set_default_size(self.cache_file["width"],
                                   self.cache_file["height"])
 
@@ -38,13 +38,20 @@ class MainWindow(Gtk.Window):
         self.connect("delete-event", self.__close)
         self.show_all()
 
+        if (self.cache_file["x"] is not None and
+                self.cache_file["y"] is not None):
+            self.move(self.cache_file["x"], self.cache_file["y"])
+
     def run(self):
         Gtk.main()
 
     def __close(self, *more):
         size = self.get_size()
+        position = self.get_position()
         self.cache_file["width"] = size[0]
         self.cache_file["height"] = size[1]
+        self.cache_file["x"] = position[0]
+        self.cache_file["y"] = position[1]
         self.cache_file.write()
         Gtk.main_quit()
         return True
