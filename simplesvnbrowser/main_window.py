@@ -22,10 +22,10 @@ class MainWindow(Gtk.Window):
         top_hbox = Gtk.Box()
         self.address_entry = Gtk.Entry(text = url)
         self.address_entry.connect("activate", self.on_go_button_clicked)
-        go_button = Gtk.Button(label = "Go")
-        go_button.connect("clicked", self.on_go_button_clicked)
+        self.go_button = Gtk.Button(label = "Go")
+        self.go_button.connect("clicked", self.on_go_button_clicked)
         top_hbox.pack_start(self.address_entry, True, True, 0)
-        top_hbox.pack_start(go_button, False, True, 0)
+        top_hbox.pack_start(self.go_button, False, True, 0)
 
         vbox = Gtk.Box(orientation = Gtk.Orientation.VERTICAL)
         vbox.pack_start(top_hbox, False, True, 0)
@@ -46,6 +46,8 @@ class MainWindow(Gtk.Window):
         if (self.cache_file["x"] is not None and
                 self.cache_file["y"] is not None):
             self.move(self.cache_file["x"], self.cache_file["y"])
+
+        self.__go(url)
 
     def run(self):
         Gtk.main()
@@ -110,3 +112,7 @@ class MainWindow(Gtk.Window):
                 self.directory_buttons.append(btn)
         self.directory_vbox.show_all()
         # TODO: finish
+
+    def __go(self, url):
+        self.address_entry.set_text(url)
+        self.go_button.activate()
