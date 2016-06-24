@@ -114,6 +114,11 @@ class MainWindow(Gtk.Window):
                 btn.connect("clicked", handler)
                 self.directory_vbox.pack_start(btn, False, False, 0)
                 self.directory_buttons.append(btn)
+        for i, btn in enumerate(self.directory_buttons):
+            if i == len(path_parts) - 1:
+                btn.get_child().set_markup("<b>%s</b>" % btn.caption)
+            else:
+                btn.get_child().set_label(btn.caption)
         self.directory_vbox.show_all()
         # TODO: finish
 
