@@ -70,7 +70,8 @@ class MainWindow(Gtk.Window):
     def __refresh(self, url):
         self.__refresh_repo_root(url)
         if self.repo_root is not None:
-            self.__refresh_contents(url)
+            self.__refresh_directory_buttons(url)
+            self.__refresh_directory_contents(url)
         else:
             # TODO: invalidate bottom pane
             pass
@@ -89,8 +90,7 @@ class MainWindow(Gtk.Window):
             else:
                 self.repo_root = None
 
-    def __refresh_contents(self, url):
-        stdout, _ = run_svn(["ls", url])
+    def __refresh_directory_buttons(self, url):
         if url == self.repo_root:
             path_in_repo = ""
         else:
@@ -120,6 +120,9 @@ class MainWindow(Gtk.Window):
             else:
                 btn.get_child().set_label(btn.caption)
         self.directory_vbox.show_all()
+
+    def __refresh_directory_contents(self, url):
+        stdout, _ = run_svn(["ls", url])
         # TODO: finish
 
     def __go(self, url):
