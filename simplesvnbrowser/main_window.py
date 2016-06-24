@@ -124,4 +124,4 @@ class MainWindow(Gtk.Window):
 
     def __go(self, url):
         self.address_entry.set_text(url)
-        self.go_button.activate()
+        self.on_go_button_clicked(self.go_button)
