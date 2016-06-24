@@ -88,4 +88,15 @@ class MainWindow(Gtk.Window):
 
     def __refresh_contents(self, url):
         stdout, _ = run_svn(["ls", url])
+        if url == self.repo_root:
+            path_in_repo = ""
+        else:
+            path_in_repo = url[len(self.repo_root):]
+        path_parts = re.sub(r'/+', '/', path_in_repo).split('/')
+        build_path = self.repo_root
+        for i, part in enumerate(path_parts):
+            caption = part if i > 0 else "/"
+            if part != "":
+                build_path += "/" + part
+            print("%s (%d), path %s" % (repr(caption), i, build_path))
         # TODO: finish
