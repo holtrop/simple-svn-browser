@@ -12,6 +12,8 @@ class MainWindow(Gtk.Window):
 
         self.repo_root = None
         self.cache_file = CacheFile()
+        self.directory_buttons = []
+
         if (self.cache_file["width"] is not None and
                 self.cache_file["height"] is not None):
             self.set_default_size(self.cache_file["width"],
@@ -30,7 +32,6 @@ class MainWindow(Gtk.Window):
 
         bottom_hbox = Gtk.Box()
         self.directory_vbox = Gtk.Box(orientation = Gtk.Orientation.VERTICAL)
-        self.directory_vbox.pack_start(Gtk.Label(label = "left placeholder"), False, True, 0)
         bottom_hbox.pack_start(self.directory_vbox, False, True, 0)
         separator = Gtk.Separator(orientation = Gtk.Orientation.VERTICAL)
         bottom_hbox.pack_start(separator, False, True, 0)
@@ -98,5 +99,14 @@ class MainWindow(Gtk.Window):
             caption = part if i > 0 else "/"
             if part != "":
                 build_path += "/" + part
-            print("%s (%d), path %s" % (repr(caption), i, build_path))
+            if (len(self.directory_buttons) > i and
+                    self.directory_buttons[i].caption != caption):
+                # TODO: remove obsolete directory buttons
+                pass
+            if len(self.directory_buttons) <= i:
+                btn = Gtk.Button(label = caption)
+                btn.caption = caption
+                self.directory_vbox.pack_start(btn, False, False, 0)
+                self.directory_buttons.append(btn)
+        self.directory_vbox.show_all()
         # TODO: finish
