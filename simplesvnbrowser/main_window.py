@@ -96,18 +96,22 @@ class MainWindow(Gtk.Window):
         else:
             path_in_repo = url[len(self.repo_root):]
         path_parts = re.sub(r'/+', '/', path_in_repo).split('/')
-        build_path = self.repo_root
+        directory_url = self.repo_root
         for i, part in enumerate(path_parts):
             caption = part if i > 0 else "/"
             if part != "":
-                build_path += "/" + part
+                directory_url += "/" + part
             if (len(self.directory_buttons) > i and
                     self.directory_buttons[i].caption != caption):
-                # TODO: remove obsolete directory buttons
-                pass
+                for btn in self.directory_buttons[i:]:
+                    btn.destroy()
+                self.directory_buttons[i:] = []
             if len(self.directory_buttons) <= i:
                 btn = Gtk.Button(label = caption)
                 btn.caption = caption
+                btn.directory_url = directory_url
+                handler = lambda widget: self.__go(widget.directory_url)
+                btn.connect("clicked", handler)
                 self.directory_vbox.pack_start(btn, False, False, 0)
                 self.directory_buttons.append(btn)
         self.directory_vbox.show_all()
