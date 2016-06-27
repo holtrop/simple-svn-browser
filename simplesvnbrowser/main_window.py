@@ -19,6 +19,7 @@ class MainWindow(Gtk.Window):
         self.cache_file = CacheFile()
         self.directory_buttons = []
         self.clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
+        self.url_history = []
 
         if (self.cache_file["width"] is not None and
                 self.cache_file["height"] is not None):
@@ -63,6 +64,7 @@ class MainWindow(Gtk.Window):
         self.add(vbox)
 
         self.connect("delete-event", self.__close)
+        self.connect("key-press-event", self.__on_key_press_event)
 
         icon_theme = Gtk.IconTheme.get_default()
         icon = icon_theme.load_icon("folder", 128, 0)
@@ -102,6 +104,8 @@ class MainWindow(Gtk.Window):
         self.__refresh_repo_root(url)
         if self.repo_root is not None:
             self.current_url = url
+            if len(self.url_history) < 1 or self.url_history[-1] != url:
+                self.url_history.append(url)
             self.__refresh_directory_buttons(url)
             self.__refresh_directory_contents(url)
         else:
@@ -207,3 +211,11 @@ class MainWindow(Gtk.Window):
                 self.popup_menu.append(mi)
                 self.popup_menu.show_all()
                 self.popup_menu.popup(None, None, None, None, event.button, event.time)
+
+    def __on_key_press_event(self, widget, event):
+        if event.keyval == Gdk.keyval_from_name("Back"):
+            if len(self.url_history) >= 2:
+                self.url_history.pop()
+                self.__go(self.url_history.pop())
+            return True
+        return False
