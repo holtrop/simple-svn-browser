@@ -30,12 +30,22 @@ class MainWindow(Gtk.Window):
         vbox = Gtk.Box(orientation = Gtk.Orientation.VERTICAL)
         vbox.pack_start(top_hbox, False, True, 0)
 
+        self.contents_model = Gtk.ListStore(str, str)
+        self.contents_treeview = Gtk.TreeView.new_with_model(self.contents_model)
+        self.contents_treeview.set_headers_visible(False)
+        icon_renderer = Gtk.CellRendererPixbuf()
+        column = Gtk.TreeViewColumn("Icon", icon_renderer, icon_name = 0)
+        self.contents_treeview.append_column(column)
+        text_renderer = Gtk.CellRendererText()
+        column = Gtk.TreeViewColumn("Name", text_renderer, text = 1)
+        self.contents_treeview.append_column(column)
+
         bottom_hbox = Gtk.Box()
         self.directory_vbox = Gtk.Box(orientation = Gtk.Orientation.VERTICAL)
         bottom_hbox.pack_start(self.directory_vbox, False, True, 0)
         separator = Gtk.Separator(orientation = Gtk.Orientation.VERTICAL)
         bottom_hbox.pack_start(separator, False, True, 0)
-        bottom_hbox.pack_start(Gtk.Label(label = "right placeholder"), True, True, 0)
+        bottom_hbox.pack_start(self.contents_treeview, True, True, 0)
         vbox.pack_start(bottom_hbox, True, True, 0)
 
         self.add(vbox)
@@ -123,6 +133,17 @@ class MainWindow(Gtk.Window):
 
     def __refresh_directory_contents(self, url):
         stdout, _ = run_svn(["ls", url])
+        self.contents_model.clear()
+        for line in stdout.split("\n"):
+            entry_name = line.rstrip("\r\n")
+            if entry_name == "":
+                continue
+            folder = False
+            m = re.match(r'(.*)/', entry_name)
+            if m is not None:
+                entry_name = m.group(1)
+                folder = True
+            self.contents_model.append(("folder" if folder else "text-x-generic", entry_name))
         # TODO: finish
 
     def __go(self, url):
