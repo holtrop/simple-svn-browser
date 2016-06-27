@@ -42,6 +42,7 @@ class MainWindow(Gtk.Window):
         self.contents_treeview.set_headers_visible(False)
         self.contents_treeview.connect("row-activated", self.__on_contents_treeview_row_activated)
         self.contents_treeview.connect("button-release-event", self.__on_contents_treeview_button_press)
+        self.contents_treeview.set_search_column(1)
         icon_renderer = Gtk.CellRendererPixbuf()
         column = Gtk.TreeViewColumn("Icon", icon_renderer, icon_name = 0)
         self.contents_treeview.append_column(column)
