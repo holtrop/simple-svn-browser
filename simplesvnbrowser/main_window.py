@@ -1,4 +1,8 @@
+import os
 import re
+import subprocess
+import sys
+import tempfile
 import gi
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk
@@ -165,8 +169,17 @@ class MainWindow(Gtk.Window):
         model_iterator = self.contents_model.get_iter(path)
         entry_type = self.contents_model.get_value(model_iterator, 0)
         entry_name = self.contents_model.get_value(model_iterator, 1)
+        entry_url = self.current_url + "/" + entry_name
         if entry_type == "folder":
-            self.__go(self.current_url + "/" + entry_name)
+            self.__go(entry_url)
         else:
-            # TODO
-            pass
+            self.__activate_file(entry_url)
+
+    def __activate_file(self, url):
+        with tempfile.NamedTemporaryFile(suffix = "-" + os.path.basename(url)) as f:
+            temp_fname = f.name
+        run_svn(["export", url, temp_fname])
+        if os.path.exists(temp_fname):
+            subprocess.run(["xdg-open", temp_fname])
+        else:
+            sys.stderr.write("Unable to export file.\n")
