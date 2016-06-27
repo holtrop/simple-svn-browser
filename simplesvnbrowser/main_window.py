@@ -99,8 +99,10 @@ class MainWindow(Gtk.Window):
             self.__refresh_directory_buttons(url)
             self.__refresh_directory_contents(url)
         else:
-            # TODO: invalidate bottom pane
-            pass
+            for btn in self.directory_buttons:
+                btn.destroy()
+            self.directory_buttons = []
+            self.contents_model.clear()
 
     def __refresh_repo_root(self, url):
         if (self.repo_root is not None and
