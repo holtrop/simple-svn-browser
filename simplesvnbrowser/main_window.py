@@ -5,7 +5,7 @@ import sys
 import tempfile
 import gi
 gi.require_version("Gtk", "3.0")
-from gi.repository import Gtk
+from gi.repository import Gtk, Gdk
 from .version import VERSION
 from .run_svn import run_svn
 from .cache_file import CacheFile
@@ -18,6 +18,7 @@ class MainWindow(Gtk.Window):
         self.current_url = None
         self.cache_file = CacheFile()
         self.directory_buttons = []
+        self.clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
 
         if (self.cache_file["width"] is not None and
                 self.cache_file["height"] is not None):
@@ -39,6 +40,7 @@ class MainWindow(Gtk.Window):
         self.contents_treeview = Gtk.TreeView.new_with_model(self.contents_model)
         self.contents_treeview.set_headers_visible(False)
         self.contents_treeview.connect("row-activated", self.__on_contents_treeview_row_activated)
+        self.contents_treeview.connect("button-release-event", self.__on_contents_treeview_button_press)
         icon_renderer = Gtk.CellRendererPixbuf()
         column = Gtk.TreeViewColumn("Icon", icon_renderer, icon_name = 0)
         self.contents_treeview.append_column(column)
@@ -187,3 +189,17 @@ class MainWindow(Gtk.Window):
             subprocess.run(["xdg-open", temp_fname])
         else:
             sys.stderr.write("Unable to export file.\n")
+
+    def __on_contents_treeview_button_press(self, widget, event):
+        if event.button == 3:
+            selected_iterator = self.contents_treeview.get_selection().get_selected()
+            if selected_iterator is not None and selected_iterator[1] is not None:
+                entry_name = selected_iterator[0].get_value(selected_iterator[1], 1)
+                entry_url = self.current_url + "/" + entry_name
+                self.popup_menu = Gtk.Menu()
+                mi = Gtk.MenuItem(label = "Copy URL")
+                handler = lambda widget: self.clipboard.set_text(entry_url, -1)
+                mi.connect("activate", handler)
+                self.popup_menu.append(mi)
+                self.popup_menu.show_all()
+                self.popup_menu.popup(None, None, None, None, event.button, event.time)
