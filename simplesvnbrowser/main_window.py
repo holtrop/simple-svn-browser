@@ -79,8 +79,10 @@ class MainWindow(Gtk.Window):
         Gtk.main()
 
     def __on_go_button_clicked(self, widget):
-        self.__refresh(self.address_entry.get_text())
-        self.contents_treeview.grab_focus()
+        url = self.address_entry.get_text()
+        self.__refresh(url)
+        if url != "":
+            self.contents_treeview.grab_focus()
         return True
 
     def __close(self, *more):
