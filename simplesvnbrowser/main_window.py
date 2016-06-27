@@ -213,9 +213,25 @@ class MainWindow(Gtk.Window):
                 self.popup_menu.popup(None, None, None, None, event.button, event.time)
 
     def __on_key_press_event(self, widget, event):
+        if event.state & Gdk.ModifierType.MOD1_MASK:
+            if event.keyval == Gdk.keyval_from_name("Up"):
+                self.__go_up()
+                return True
+            elif event.keyval == Gdk.keyval_from_name("Left"):
+                self.__go_back()
+                return True
         if event.keyval == Gdk.keyval_from_name("Back"):
-            if len(self.url_history) >= 2:
-                self.url_history.pop()
-                self.__go(self.url_history.pop())
+            self.__go_back()
             return True
         return False
+
+    def __go_back(self):
+        if len(self.url_history) >= 2:
+            self.url_history.pop()
+            self.__go(self.url_history.pop())
+
+    def __go_up(self):
+        if (self.current_url is not None and
+                self.repo_root is not None and
+                len(self.current_url) > len(self.repo_root)):
+            self.__go(os.path.dirname(self.current_url))
