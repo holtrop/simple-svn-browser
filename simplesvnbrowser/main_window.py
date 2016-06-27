@@ -22,9 +22,9 @@ class MainWindow(Gtk.Window):
 
         top_hbox = Gtk.Box()
         self.address_entry = Gtk.Entry(text = url)
-        self.address_entry.connect("activate", self.on_go_button_clicked)
+        self.address_entry.connect("activate", self.__on_go_button_clicked)
         self.go_button = Gtk.Button(label = "Go")
-        self.go_button.connect("clicked", self.on_go_button_clicked)
+        self.go_button.connect("clicked", self.__on_go_button_clicked)
         top_hbox.pack_start(self.address_entry, True, True, 0)
         top_hbox.pack_start(self.go_button, False, True, 0)
 
@@ -67,7 +67,7 @@ class MainWindow(Gtk.Window):
     def run(self):
         Gtk.main()
 
-    def on_go_button_clicked(self, widget):
+    def __on_go_button_clicked(self, widget):
         self.__refresh(self.address_entry.get_text())
         return True
 
@@ -159,7 +159,7 @@ class MainWindow(Gtk.Window):
 
     def __go(self, url):
         self.address_entry.set_text(url)
-        self.on_go_button_clicked(self.go_button)
+        self.__on_go_button_clicked(self.go_button)
 
     def __on_contents_treeview_row_activated(self, widget, path, column):
         model_iterator = self.contents_model.get_iter(path)
