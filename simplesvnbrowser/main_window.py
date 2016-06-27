@@ -57,8 +57,6 @@ class MainWindow(Gtk.Window):
         bottom_hbox = Gtk.Box()
         self.directory_vbox = Gtk.Box(orientation = Gtk.Orientation.VERTICAL)
         bottom_hbox.pack_start(self.directory_vbox, False, True, 0)
-        separator = Gtk.Separator(orientation = Gtk.Orientation.VERTICAL)
-        bottom_hbox.pack_start(separator, False, True, 0)
         bottom_hbox.pack_start(contents_scrolledwindow, True, True, 0)
         vbox.pack_start(bottom_hbox, True, True, 0)
 
