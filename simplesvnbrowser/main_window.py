@@ -40,12 +40,16 @@ class MainWindow(Gtk.Window):
         column = Gtk.TreeViewColumn("Name", text_renderer, text = 1)
         self.contents_treeview.append_column(column)
 
+        contents_scrolledwindow = Gtk.ScrolledWindow()
+        contents_scrolledwindow.set_vexpand(True)
+        contents_scrolledwindow.add(self.contents_treeview)
+
         bottom_hbox = Gtk.Box()
         self.directory_vbox = Gtk.Box(orientation = Gtk.Orientation.VERTICAL)
         bottom_hbox.pack_start(self.directory_vbox, False, True, 0)
         separator = Gtk.Separator(orientation = Gtk.Orientation.VERTICAL)
         bottom_hbox.pack_start(separator, False, True, 0)
-        bottom_hbox.pack_start(self.contents_treeview, True, True, 0)
+        bottom_hbox.pack_start(contents_scrolledwindow, True, True, 0)
         vbox.pack_start(bottom_hbox, True, True, 0)
 
         self.add(vbox)
