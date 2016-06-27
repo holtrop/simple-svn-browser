@@ -51,11 +51,10 @@ class MainWindow(Gtk.Window):
         self.add(vbox)
 
         self.connect("delete-event", self.__close)
-        self.show_all()
 
-        if (self.cache_file["x"] is not None and
-                self.cache_file["y"] is not None):
-            self.move(self.cache_file["x"], self.cache_file["y"])
+        self.__set_default_window_position()
+        self.show_all()
+        self.__set_default_window_position()
 
         self.__go(url)
 
@@ -76,6 +75,11 @@ class MainWindow(Gtk.Window):
         self.cache_file.write()
         Gtk.main_quit()
         return True
+
+    def __set_default_window_position(self):
+        if (self.cache_file["x"] is not None and
+                self.cache_file["y"] is not None):
+            self.move(self.cache_file["x"], self.cache_file["y"])
 
     def __refresh(self, url):
         self.__refresh_repo_root(url)
