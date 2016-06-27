@@ -11,6 +11,7 @@ class MainWindow(Gtk.Window):
         super().__init__(title = "Simple SVN Browser v%s" % VERSION)
 
         self.repo_root = None
+        self.current_url = None
         self.cache_file = CacheFile()
         self.directory_buttons = []
 
@@ -33,6 +34,7 @@ class MainWindow(Gtk.Window):
         self.contents_model = Gtk.ListStore(str, str)
         self.contents_treeview = Gtk.TreeView.new_with_model(self.contents_model)
         self.contents_treeview.set_headers_visible(False)
+        self.contents_treeview.connect("row-activated", self.__on_contents_treeview_row_activated)
         icon_renderer = Gtk.CellRendererPixbuf()
         column = Gtk.TreeViewColumn("Icon", icon_renderer, icon_name = 0)
         self.contents_treeview.append_column(column)
@@ -86,8 +88,10 @@ class MainWindow(Gtk.Window):
             self.move(self.cache_file["x"], self.cache_file["y"])
 
     def __refresh(self, url):
+        url = re.sub(r'/+$', '', url)
         self.__refresh_repo_root(url)
         if self.repo_root is not None:
+            self.current_url = url
             self.__refresh_directory_buttons(url)
             self.__refresh_directory_contents(url)
         else:
@@ -152,8 +156,17 @@ class MainWindow(Gtk.Window):
                 entry_name = m.group(1)
                 folder = True
             self.contents_model.append(("folder" if folder else "text-x-generic", entry_name))
-        # TODO: finish
 
     def __go(self, url):
         self.address_entry.set_text(url)
         self.on_go_button_clicked(self.go_button)
+
+    def __on_contents_treeview_row_activated(self, widget, path, column):
+        model_iterator = self.contents_model.get_iter(path)
+        entry_type = self.contents_model.get_value(model_iterator, 0)
+        entry_name = self.contents_model.get_value(model_iterator, 1)
+        if entry_type == "folder":
+            self.__go(self.current_url + "/" + entry_name)
+        else:
+            # TODO
+            pass
