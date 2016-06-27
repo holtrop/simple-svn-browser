@@ -64,6 +64,10 @@ class MainWindow(Gtk.Window):
 
         self.connect("delete-event", self.__close)
 
+        icon_theme = Gtk.IconTheme.get_default()
+        icon = icon_theme.load_icon("folder", 128, 0)
+        self.set_icon(icon)
+
         self.__set_default_window_position()
         self.show_all()
         self.__set_default_window_position()
