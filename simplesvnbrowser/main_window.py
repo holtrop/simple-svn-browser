@@ -137,6 +137,7 @@ class MainWindow(Gtk.Window):
                 self.directory_buttons[i:] = []
             if len(self.directory_buttons) <= i:
                 btn = Gtk.Button(label = caption)
+                btn.get_child().set_xalign(0.0)
                 btn.caption = caption
                 btn.directory_url = directory_url
                 handler = lambda widget: self.__go(widget.directory_url)
