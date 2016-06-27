@@ -219,11 +219,14 @@ class MainWindow(Gtk.Window):
             if event.keyval == Gdk.keyval_from_name("Up"):
                 self.__go_up()
                 return True
-            elif event.keyval == Gdk.keyval_from_name("Left"):
+            if event.keyval == Gdk.keyval_from_name("Left"):
                 self.__go_back()
                 return True
         if event.keyval == Gdk.keyval_from_name("Back"):
             self.__go_back()
+            return True
+        if event.keyval == Gdk.keyval_from_name("Escape"):
+            Gtk.main_quit()
             return True
         return False
 
