@@ -130,7 +130,8 @@ class MainWindow(Gtk.Window):
             if part != "":
                 directory_url += "/" + part
             if (len(self.directory_buttons) > i and
-                    self.directory_buttons[i].caption != caption):
+                    (self.directory_buttons[i].caption != caption or
+                     self.directory_buttons[i].directory_url != directory_url)):
                 for btn in self.directory_buttons[i:]:
                     btn.destroy()
                 self.directory_buttons[i:] = []
