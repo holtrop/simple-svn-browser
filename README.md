@@ -28,6 +28,9 @@ pip3 uninstall simplesvnbrowser
 
 ## Usage
 
+If installed with pip3, the binary might be installed somewhere like
+`$HOME/.local/bin`, so make sure that's in your `$PATH` first.
+
 ```bash
 simple-svn-browser [working-copy-path-or-repository-url]
 ```
