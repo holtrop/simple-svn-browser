@@ -10,6 +10,10 @@ As a side-effect, you'll need to have your Subversion credentials cached for
 any repository you browse.
 Simple SVN Browser has no mechanism to accept credentials.
 
+## Screenshot
+
+![Simple SVN Browser Screenshot](doc/screenshot.png)
+
 ## Installation
 
 ```bash
