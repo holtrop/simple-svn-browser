@@ -10,5 +10,5 @@ setup(name = "simplesvnbrowser",
       packages = ["simplesvnbrowser"],
       zip_safe = False,
       scripts = ["bin/simple-svn-browser"],
-      install_requires = ["pyxdg"],
+      install_requires = ["pygobject", "pyxdg"],
       )
