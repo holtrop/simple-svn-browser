@@ -1,3 +1,8 @@
+import sys
+if sys.version_info < (3, 5):
+    print("Python 3.5 is required for this package")
+    sys.exit(1)
+
 from setuptools import setup
 
 setup(name = "simplesvnbrowser",
