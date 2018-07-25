@@ -14,13 +14,32 @@ Simple SVN Browser has no mechanism to accept credentials.
 
 ![Simple SVN Browser Screenshot](doc/screenshot.png)
 
+## Dependencies
+
+To install without PIP, the following packages are needed:
+
+  * python3-gi
+  * python3-xdg
+
 ## Installation
+
+### From Repository
+
+Clone the repository, and then run:
+
+```bash
+python3 setup.py install --user
+```
+
+### Using PIP
 
 ```bash
 pip3 install --user git+git://github.com/holtrop/simple-svn-browser.git
 ```
 
 ## Uninstallation
+
+### Using PIP
 
 ```bash
 pip3 uninstall simplesvnbrowser
